@@ -5,11 +5,11 @@ description: >
   view timelines, and more. Use when the task involves reading or writing to X/Twitter,
   managing an X account, or automating social media workflows. Binary: ax.
   NO_DNA compliant: set NO_DNA=1 for structured JSON output.
-license: MIT
+license: GPL-3.0
 compatibility: Requires X API credentials (OAuth 2.0 or OAuth 1.0a). Binary: ax. Install via cargo install agent-x.
 metadata:
   author: chris
-  version: "0.1.0"
+  version: "0.2.0"
   tags: "twitter,x,social-media,api,cli"
 ---
 
