@@ -5,6 +5,11 @@ edition = "2021"
 description = "Agent-first Twitter/X CLI"
 license = "MIT"
 rust-version = "1.75"
+repository = "https://github.com/Sortis-AI/ax"
+homepage = "https://github.com/Sortis-AI/ax"
+readme = "README.md"
+keywords = ["twitter", "x", "cli", "api", "agent"]
+categories = ["command-line-utilities", "web-programming::http-client"]
 
 [[bin]]
 name = "ax"
