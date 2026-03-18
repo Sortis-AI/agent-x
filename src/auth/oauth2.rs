@@ -10,6 +10,7 @@ use tokio::sync::RwLock;
 use crate::auth::token_store::{self, StoredTokens};
 use crate::error::AgentXError;
 
+const DEFAULT_CLIENT_ID: &str = "Q2Ffd1FnRkZQYnJhSDd4aFZhaEg6MTpjaQ";
 const DEFAULT_SCOPES: &str = "tweet.read tweet.write users.read like.read like.write bookmark.read bookmark.write follows.read follows.write offline.access";
 
 pub struct OAuth2Auth {
@@ -89,6 +90,12 @@ fn generate_pkce() -> (String, String) {
     let challenge = base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(hasher.finalize());
 
     (verifier, challenge)
+}
+
+/// Resolve client ID: env var override, or compiled-in default.
+pub fn resolve_client_id() -> String {
+    std::env::var("X_CLIENT_ID")
+        .unwrap_or_else(|_| DEFAULT_CLIENT_ID.to_string())
 }
 
 /// Run the full OAuth 2.0 PKCE login flow.

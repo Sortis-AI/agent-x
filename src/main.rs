@@ -53,9 +53,7 @@ async fn handle_auth(
 ) -> Result<(), AgentXError> {
     match action {
         cli::auth::AuthAction::Login { scopes, port } => {
-            let client_id = std::env::var("X_CLIENT_ID").map_err(|_| {
-                AgentXError::Auth("X_CLIENT_ID env var required for OAuth 2.0 login".to_string())
-            })?;
+            let client_id = auth::oauth2::resolve_client_id();
             auth::oauth2::login(
                 &client_id,
                 scopes.as_deref(),
