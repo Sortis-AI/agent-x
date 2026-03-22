@@ -45,4 +45,6 @@ pub enum Command {
         #[command(subcommand)]
         action: auth::AuthAction,
     },
+    /// Show instructions for installing the ax skill
+    Skill,
 }

@@ -50,7 +50,7 @@ User/Agent
 
 | Port | Usage |
 |------|-------|
-| 8477 (default) | OAuth 2.0 PKCE callback server (configurable via `--port`) |
+| 21847 (default) | OAuth 2.0 PKCE callback server (configurable via `--port`) |
 
 ## File locations
 
