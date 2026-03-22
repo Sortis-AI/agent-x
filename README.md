@@ -52,7 +52,7 @@ ax [--output json|plain|markdown|human] [--verbose]
 └── auth login [--no-browser]|callback|status|logout
 ```
 
-See `ax --help`, `ax <command> --help`, or [skills/ax/SKILL.md](skills/ax/SKILL.md) for full usage.
+See `ax --help`, `ax <command> --help`, or [skills/agent-x/SKILL.md](skills/agent-x/SKILL.md) for full usage.
 
 ## Output modes
 
@@ -96,7 +96,7 @@ cargo run -- --help   # Run locally
 ```
 agent-x/
 ├── Cargo.toml          # Package manifest
-├── skills/ax/          # Distributable skill (vercel-labs/skills format)
+├── skills/agent-x/     # Distributable skill (vercel-labs/skills format)
 ├── references/API.md   # X API v2 endpoint reference
 ├── src/
 │   ├── main.rs         # Entry point, CLI dispatch

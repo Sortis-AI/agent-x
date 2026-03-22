@@ -1,5 +1,5 @@
 ---
-name: ax
+name: agent-x
 description: >
   Interact with X (Twitter) from the command line — post tweets, search, manage bookmarks,
   view timelines, and more. Use when the task involves reading or writing to X/Twitter,
@@ -9,7 +9,7 @@ license: GPL-3.0
 compatibility: Requires Rust toolchain (cargo) or pre-built binary. Requires X API credentials (OAuth 2.0, OAuth 1.0a, or Bearer token).
 metadata:
   author: chris
-  version: "0.3.2"
+  version: "0.3.3"
   tags: "twitter,x,social-media,api,cli"
 ---
 

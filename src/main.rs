@@ -54,26 +54,26 @@ async fn run(command: Command, config: &RuntimeConfig) -> Result<(), AgentXError
 fn handle_skill(config: &RuntimeConfig) {
     if config.no_dna {
         let info = serde_json::json!({
-            "skill": "ax",
+            "skill": "agent-x",
             "repository": "https://github.com/Sortis-AI/ax",
-            "path": "skills/ax",
-            "install": "Add to your agent's skills directory:\n  git clone https://github.com/Sortis-AI/ax.git /tmp/ax-skill && cp -r /tmp/ax-skill/skills/ax ~/.claude/skills/ax && rm -rf /tmp/ax-skill",
+            "path": "skills/agent-x",
+            "install": "Add to your agent's skills directory:\n  git clone https://github.com/Sortis-AI/ax.git /tmp/ax-skill && cp -r /tmp/ax-skill/skills/agent-x ~/.claude/skills/agent-x && rm -rf /tmp/ax-skill",
         });
         println!("{}", serde_json::to_string_pretty(&info).unwrap());
     } else {
         println!("ax skill — install instructions");
         println!();
-        println!("The ax skill teaches agents how to use this CLI.");
-        println!("Source: https://github.com/Sortis-AI/ax/tree/main/skills/ax");
+        println!("The agent-x skill teaches agents how to use this CLI.");
+        println!("Source: https://github.com/Sortis-AI/ax/tree/main/skills/agent-x");
         println!();
         println!("Install:");
         println!("  git clone https://github.com/Sortis-AI/ax.git /tmp/ax-skill");
-        println!("  cp -r /tmp/ax-skill/skills/ax ~/.claude/skills/ax");
+        println!("  cp -r /tmp/ax-skill/skills/agent-x ~/.claude/skills/agent-x");
         println!("  rm -rf /tmp/ax-skill");
         println!();
         println!("Or add as a git submodule in your project:");
         println!("  git submodule add https://github.com/Sortis-AI/ax.git vendor/ax");
-        println!("  # Skill is at vendor/ax/skills/ax/SKILL.md");
+        println!("  # Skill is at vendor/ax/skills/agent-x/SKILL.md");
     }
 }
 

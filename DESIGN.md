@@ -29,7 +29,7 @@ Detection: `std::env::var("NO_DNA").is_ok_and(|v| !v.is_empty())`. Affects outpu
 ## Distribution points
 
 - **crates.io**: `cargo install agent-x` (binary name: `ax`)
-- **skills/ax/SKILL.md**: Agentskills spec for agent discovery
+- **skills/agent-x/SKILL.md**: Agentskills spec for agent discovery
 
 ### Non-interactive OAuth split flow
 
