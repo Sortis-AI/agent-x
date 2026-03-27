@@ -49,9 +49,14 @@ impl AuthProvider {
 }
 
 /// Resolution order: stored OAuth 2.0 > env OAuth 1.0a > env Bearer.
-pub fn resolve_auth() -> Result<AuthProvider, AgentXError> {
+/// Automatically refreshes expired OAuth 2.0 tokens if a refresh token exists.
+pub async fn resolve_auth() -> Result<AuthProvider, AgentXError> {
     // Try OAuth 2.0 stored tokens first
     if let Some(provider) = oauth2::OAuth2Auth::from_stored_tokens() {
+        // Auto-refresh if expired
+        if provider.needs_refresh().await {
+            let _ = provider.refresh().await;
+        }
         return Ok(AuthProvider::OAuth2(provider));
     }
 

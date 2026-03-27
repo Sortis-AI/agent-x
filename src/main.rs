@@ -39,7 +39,7 @@ async fn run(command: Command, config: &RuntimeConfig) -> Result<(), AgentXError
             Ok(())
         }
         _ => {
-            let auth = auth::resolve_auth()?;
+            let auth = auth::resolve_auth().await?;
             let client = XClient::new(auth)?;
             match command {
                 Command::Tweet { action } => handle_tweet(action, &client, config).await,
@@ -118,7 +118,7 @@ async fn handle_auth(
             Ok(())
         }
         cli::auth::AuthAction::Status => {
-            let status = match auth::resolve_auth() {
+            let status = match auth::resolve_auth().await {
                 Ok(provider) => {
                     let mut s = AuthStatus {
                         method: provider.method_name().to_string(),

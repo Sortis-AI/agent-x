@@ -47,7 +47,7 @@ impl OAuth2Auth {
     }
 
     /// Check if token needs refresh (30s buffer).
-    async fn needs_refresh(&self) -> bool {
+    pub async fn needs_refresh(&self) -> bool {
         let tokens = self.tokens.read().await;
         if let Some(exp) = tokens.expires_at {
             let now = chrono::Utc::now().timestamp();
