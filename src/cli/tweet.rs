@@ -7,6 +7,9 @@ pub enum TweetAction {
         /// Paths to media files to attach
         #[arg(long)]
         media: Vec<String>,
+        /// Post to a community (community ID)
+        #[arg(long)]
+        community_id: Option<String>,
     },
     /// Get a tweet by ID
     Get {

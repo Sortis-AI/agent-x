@@ -140,6 +140,32 @@ pub struct AuthLoginAction {
     pub url: String,
 }
 
+/// Community object from X API v2.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Community {
+    pub id: String,
+    #[serde(default)]
+    pub name: Option<String>,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub created_at: Option<String>,
+    #[serde(default)]
+    pub member_count: Option<u64>,
+    #[serde(default)]
+    pub access: Option<String>,
+    #[serde(default)]
+    pub join_policy: Option<String>,
+}
+
+/// Wrapper for a list of communities (search results).
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CommunityList {
+    pub communities: Vec<Community>,
+    pub next_token: Option<String>,
+    pub result_count: Option<u32>,
+}
+
 // --- Renderable impls ---
 
 impl Renderable for Tweet {
@@ -414,5 +440,97 @@ impl Renderable for AuthLoginAction {
             "**{}**\n\n[Authorize here]({})",
             self.action_required, self.url
         )
+    }
+}
+
+impl Renderable for Community {
+    fn render_human(&self) -> String {
+        use colored::Colorize;
+        let mut out = String::new();
+        if let Some(name) = &self.name {
+            out.push_str(&format!("{}", name.bold()));
+        } else {
+            out.push_str(&format!("{}", "Unnamed Community".dimmed()));
+        }
+        if let Some(access) = &self.access {
+            out.push_str(&format!(" [{}]", access));
+        }
+        out.push('\n');
+        if let Some(desc) = &self.description {
+            out.push_str(&format!("{desc}\n"));
+        }
+        if let Some(count) = self.member_count {
+            out.push_str(&format!("Members: {}", count.to_string().bold()));
+        }
+        out.push_str(&format!("\n{}", format!("ID: {}", self.id).dimmed()));
+        out
+    }
+
+    fn render_plain(&self) -> String {
+        let name = self.name.as_deref().unwrap_or("");
+        let desc = self
+            .description
+            .as_deref()
+            .unwrap_or("")
+            .replace(['\t', '\n'], " ");
+        let members = self.member_count.map(|c| c.to_string()).unwrap_or_default();
+        format!("{}\t{}\t{}\t{}", self.id, name, members, desc)
+    }
+
+    fn render_markdown(&self) -> String {
+        let name = self.name.as_deref().unwrap_or("Unnamed Community");
+        let mut out = format!("## {name}\n");
+        if let Some(desc) = &self.description {
+            out.push_str(&format!("\n{desc}\n"));
+        }
+        if let Some(count) = self.member_count {
+            out.push_str(&format!("\n**Members:** {count}\n"));
+        }
+        if let Some(access) = &self.access {
+            out.push_str(&format!("**Access:** {access}\n"));
+        }
+        out.push_str(&format!("\n*ID: {}*", self.id));
+        out
+    }
+}
+
+impl Renderable for CommunityList {
+    fn render_human(&self) -> String {
+        use colored::Colorize;
+        let mut out = String::new();
+        for (i, c) in self.communities.iter().enumerate() {
+            if i > 0 {
+                out.push_str(&format!("\n{}\n", "─".repeat(40).dimmed()));
+            }
+            out.push_str(&c.render(OutputMode::Human));
+        }
+        if let Some(token) = &self.next_token {
+            out.push_str(&format!("\n\n{}", format!("Next: {token}").dimmed()));
+        }
+        out
+    }
+
+    fn render_plain(&self) -> String {
+        let mut lines: Vec<String> = self
+            .communities
+            .iter()
+            .map(|c| c.render(OutputMode::Plain))
+            .collect();
+        if let Some(token) = &self.next_token {
+            lines.push(format!("next_token\t{token}"));
+        }
+        lines.join("\n")
+    }
+
+    fn render_markdown(&self) -> String {
+        let mut parts: Vec<String> = self
+            .communities
+            .iter()
+            .map(|c| c.render(OutputMode::Markdown))
+            .collect();
+        if let Some(token) = &self.next_token {
+            parts.push(format!("\n---\n*Next page: `{token}`*"));
+        }
+        parts.join("\n\n---\n\n")
     }
 }

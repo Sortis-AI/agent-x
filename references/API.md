@@ -62,6 +62,25 @@ Quote:
 | `/users/:id/retweets` | POST | Retweet |
 | `/users/:id/retweets/:tweet_id` | DELETE | Undo retweet |
 
+## Communities
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/communities/search` | GET | Search for communities |
+| `/communities/:id` | GET | Get community by ID |
+
+### Community fields
+
+`id`, `name`, `description`, `created_at`, `member_count`, `access`, `join_policy`
+
+### Post to community
+
+Use `POST /tweets` with `community_id` in the body:
+
+```json
+{"text": "Hello community!", "community_id": "1234567890"}
+```
+
 ## Pagination
 
 List endpoints return:

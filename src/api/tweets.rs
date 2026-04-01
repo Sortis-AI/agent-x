@@ -26,8 +26,15 @@ impl XClient {
             .ok_or_else(|| AgentXError::NotFound(format!("Tweet {id} not found")))
     }
 
-    pub async fn post_tweet(&self, text: &str) -> Result<Tweet, AgentXError> {
-        let body = serde_json::json!({ "text": text });
+    pub async fn post_tweet(
+        &self,
+        text: &str,
+        community_id: Option<&str>,
+    ) -> Result<Tweet, AgentXError> {
+        let mut body = serde_json::json!({ "text": text });
+        if let Some(cid) = community_id {
+            body["community_id"] = serde_json::Value::String(cid.to_string());
+        }
         let resp = self.post("/tweets", body).await?;
         let api: ApiResponse<Tweet> = resp.json().await?;
         api.data.ok_or_else(|| AgentXError::Api {

@@ -45,6 +45,7 @@ async fn run(command: Command, config: &RuntimeConfig) -> Result<(), AgentXError
                 Command::Tweet { action } => handle_tweet(action, &client, config).await,
                 Command::User { action } => handle_user(action, &client, config).await,
                 Command::SelfOps { action } => handle_self(action, &client, config).await,
+                Command::Community { action } => handle_community(action, &client, config).await,
                 Command::Auth { .. } | Command::Skill => unreachable!(),
             }
         }
@@ -55,24 +56,24 @@ fn handle_skill(config: &RuntimeConfig) {
     if config.no_dna {
         let info = serde_json::json!({
             "skill": "agent-x",
-            "repository": "https://github.com/Sortis-AI/ax",
+            "repository": "https://github.com/Sortis-AI/agent-x",
             "path": "skills/agent-x",
-            "install": "Add to your agent's skills directory:\n  git clone https://github.com/Sortis-AI/ax.git /tmp/ax-skill && cp -r /tmp/ax-skill/skills/agent-x ~/.claude/skills/agent-x && rm -rf /tmp/ax-skill",
+            "install": "Add to your agent's skills directory:\n  git clone https://github.com/Sortis-AI/agent-x.git /tmp/ax-skill && cp -r /tmp/ax-skill/skills/agent-x ~/.claude/skills/agent-x && rm -rf /tmp/ax-skill",
         });
         println!("{}", serde_json::to_string_pretty(&info).unwrap());
     } else {
         println!("ax skill — install instructions");
         println!();
         println!("The agent-x skill teaches agents how to use this CLI.");
-        println!("Source: https://github.com/Sortis-AI/ax/tree/main/skills/agent-x");
+        println!("Source: https://github.com/Sortis-AI/agent-x/tree/main/skills/agent-x");
         println!();
         println!("Install:");
-        println!("  git clone https://github.com/Sortis-AI/ax.git /tmp/ax-skill");
+        println!("  git clone https://github.com/Sortis-AI/agent-x.git /tmp/ax-skill");
         println!("  cp -r /tmp/ax-skill/skills/agent-x ~/.claude/skills/agent-x");
         println!("  rm -rf /tmp/ax-skill");
         println!();
         println!("Or add as a git submodule in your project:");
-        println!("  git submodule add https://github.com/Sortis-AI/ax.git vendor/ax");
+        println!("  git submodule add https://github.com/Sortis-AI/agent-x.git vendor/ax");
         println!("  # Skill is at vendor/ax/skills/agent-x/SKILL.md");
     }
 }
@@ -182,9 +183,13 @@ async fn handle_tweet(
                 .await?;
             print_output(&tweet, config.output_mode);
         }
-        TweetAction::Post { text, media: _ } => {
+        TweetAction::Post {
+            text,
+            media: _,
+            community_id,
+        } => {
             // TODO: media upload support
-            let tweet = client.post_tweet(&text).await?;
+            let tweet = client.post_tweet(&text, community_id.as_deref()).await?;
             print_output(&tweet, config.output_mode);
         }
         TweetAction::Delete { id } => {
@@ -308,6 +313,36 @@ async fn handle_self(
         SelfAction::Unbookmark { id } => {
             let result = client.unbookmark_tweet(&id).await?;
             print_output(&result, config.output_mode);
+        }
+    }
+    Ok(())
+}
+
+async fn handle_community(
+    action: cli::community::CommunityAction,
+    client: &XClient,
+    config: &RuntimeConfig,
+) -> Result<(), AgentXError> {
+    use cli::community::CommunityAction;
+
+    match action {
+        CommunityAction::Search {
+            query,
+            max_results,
+            next_token,
+        } => {
+            let list = client
+                .search_communities(&query, max_results, &next_token)
+                .await?;
+            print_output(&list, config.output_mode);
+        }
+        CommunityAction::Get { id } => {
+            let community = client.get_community(&id).await?;
+            print_output(&community, config.output_mode);
+        }
+        CommunityAction::Post { id, text } => {
+            let tweet = client.post_to_community(&id, &text).await?;
+            print_output(&tweet, config.output_mode);
         }
     }
     Ok(())

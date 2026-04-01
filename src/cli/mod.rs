@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod community;
 pub mod self_ops;
 pub mod tweet;
 pub mod user;
@@ -39,6 +40,11 @@ pub enum Command {
     SelfOps {
         #[command(subcommand)]
         action: self_ops::SelfAction,
+    },
+    /// Community operations (search, get, post)
+    Community {
+        #[command(subcommand)]
+        action: community::CommunityAction,
     },
     /// Authentication (login, status, logout)
     Auth {

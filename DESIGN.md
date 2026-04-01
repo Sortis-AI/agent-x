@@ -46,6 +46,16 @@ Design constraints:
 - **TTL**: Pending auth expires after 10 minutes. Encrypted at rest with the same AES-256-GCM scheme as tokens.
 - **NO_DNA auto-activation**: `NO_DNA=1` implies `--no-browser` — agents never get the interactive flow.
 
+### Communities support
+
+X API v2 exposes limited community endpoints: search and get-by-ID. There is no dedicated "post to community" endpoint — instead, `POST /tweets` accepts an optional `community_id` field. We expose this two ways:
+- `ax community post <id> "text"` — convenience command
+- `ax tweet post "text" --community-id <id>` — flag on existing post command
+
+Both call the same `POST /tweets` endpoint with `community_id` in the body. No community timeline or members endpoints exist in the public API.
+
+Articles/Notes have no public API endpoints and are not implemented.
+
 ## Roadmap
 
 - [ ] Media upload support (`--media` flag)

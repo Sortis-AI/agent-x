@@ -13,15 +13,17 @@ Clap-derive structs defining the command tree. Each domain has its own subcomman
 - `tweet.rs` — `TweetAction` (post, get, delete, reply, quote, search, metrics)
 - `user.rs` — `UserAction` (get, timeline, followers, following)
 - `self_ops.rs` — `SelfAction` (mentions, bookmarks, like/unlike, retweet/unretweet, bookmark/unbookmark)
+- `community.rs` — `CommunityAction` (search, get, post)
 - `auth.rs` — `AuthAction` (login, callback, status, logout)
 
 ### API Layer (`src/api/`)
 
 - `mod.rs` — `XClient` struct with HTTP client, auth, rate limiting, retry logic
-- `types.rs` — Serde types for X API v2 responses (`Tweet`, `User`, `ApiResponse<T>`, etc.) with `Renderable` impls
-- `tweets.rs` — Tweet CRUD + search + metrics
+- `types.rs` — Serde types for X API v2 responses (`Tweet`, `User`, `Community`, `ApiResponse<T>`, etc.) with `Renderable` impls
+- `tweets.rs` — Tweet CRUD + search + metrics (supports `community_id` on post)
 - `users.rs` — User lookup + timeline + followers/following
 - `self_ops.rs` — Authenticated user operations (mentions, bookmarks, likes, retweets)
+- `communities.rs` — Community search + lookup + post
 - `pagination.rs` — Pagination query param helper
 
 ### Auth Layer (`src/auth/`)
@@ -51,7 +53,7 @@ Clap-derive structs defining the command tree. Each domain has its own subcomman
 CLI args → Cli::parse() → RuntimeConfig
          → resolve_auth() → AuthProvider
          → XClient::new(auth)
-         → handle_{tweet,user,self,auth}()
+         → handle_{tweet,user,self,community,auth}()
          → XClient.{get,post,delete}()  ← rate limit + retry
          → Response → serde deserialize → Renderable type
          → print_output(item, mode) → stdout

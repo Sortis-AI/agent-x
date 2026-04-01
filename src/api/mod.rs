@@ -1,3 +1,4 @@
+pub mod communities;
 pub mod pagination;
 pub mod self_ops;
 pub mod tweets;

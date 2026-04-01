@@ -12,7 +12,8 @@ fn test_help_output() {
         .stdout(predicate::str::contains("tweet"))
         .stdout(predicate::str::contains("user"))
         .stdout(predicate::str::contains("self"))
-        .stdout(predicate::str::contains("auth"));
+        .stdout(predicate::str::contains("auth"))
+        .stdout(predicate::str::contains("community"));
 }
 
 #[test]
@@ -175,6 +176,48 @@ fn test_auth_callback_flags_no_pending_auth() {
     Command::cargo_bin("ax")
         .unwrap()
         .args(["auth", "callback", "--code", "fake", "--state", "fake"])
+        .assert()
+        .failure()
+        .code(2);
+}
+
+#[test]
+fn test_community_help() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["community", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("search"))
+        .stdout(predicate::str::contains("get"))
+        .stdout(predicate::str::contains("post"));
+}
+
+#[test]
+fn test_community_search_no_auth() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["community", "search", "test"])
+        .env_remove("X_BEARER_TOKEN")
+        .env_remove("X_API_KEY")
+        .env_remove("X_API_SECRET")
+        .env_remove("X_ACCESS_TOKEN")
+        .env_remove("X_ACCESS_TOKEN_SECRET")
+        .assert()
+        .failure()
+        .code(2);
+}
+
+#[test]
+fn test_community_get_no_auth() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["community", "get", "123"])
+        .env_remove("X_BEARER_TOKEN")
+        .env_remove("X_API_KEY")
+        .env_remove("X_API_SECRET")
+        .env_remove("X_ACCESS_TOKEN")
+        .env_remove("X_ACCESS_TOKEN_SECRET")
         .assert()
         .failure()
         .code(2);

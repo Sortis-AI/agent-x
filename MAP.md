@@ -40,6 +40,18 @@ User/Agent
   │    → encrypt → $XDG_DATA_HOME/agent-x/tokens.json
   │    → delete pending_auth.json
   │
+  ├─ ax community search "query"
+  │    → resolve_auth() → AuthProvider
+  │    → XClient.get("/communities/search", query)
+  │    → X API v2 (GET https://api.x.com/2/communities/search)
+  │    → Response → CommunityList → render(mode) → stdout
+  │
+  ├─ ax community post <id> "text"
+  │    → resolve_auth() → AuthProvider
+  │    → XClient.post("/tweets", {text, community_id})
+  │    → X API v2 (POST https://api.x.com/2/tweets)
+  │    → Response → Tweet → render(mode) → stdout
+  │
   └─ ax auth status
        → resolve_auth() → AuthProvider.method_name()
        → load_tokens() → expiry, scopes
