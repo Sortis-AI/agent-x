@@ -133,7 +133,7 @@ Check status: `ax auth status` | Log out: `ax auth logout`
 ax [--output json|plain|markdown|human] [--verbose]
 ├── tweet post [--community-id ID]|get|delete|reply|quote|search|metrics
 ├── user get|timeline|followers|following
-├── self mentions|bookmarks|like|unlike|retweet|unretweet|bookmark|unbookmark
+├── self mentions|bookmarks|like|unlike|retweet|unretweet|bookmark|unbookmark|follow|unfollow
 ├── community search|get|post
 └── auth login [--no-browser]|callback|status|logout
 ```

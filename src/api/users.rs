@@ -18,7 +18,7 @@ impl XClient {
     }
 
     /// Resolve a username to a user ID. If the input is already numeric, return it as-is.
-    async fn resolve_user_id(&self, user: &str) -> Result<String, AgentXError> {
+    pub async fn resolve_user_id(&self, user: &str) -> Result<String, AgentXError> {
         if user.chars().all(|c| c.is_ascii_digit()) {
             Ok(user.to_string())
         } else {

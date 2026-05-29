@@ -48,4 +48,14 @@ pub enum SelfAction {
         /// Tweet ID
         id: String,
     },
+    /// Follow a user
+    Follow {
+        /// Username (with or without @)
+        username: String,
+    },
+    /// Unfollow a user
+    Unfollow {
+        /// Username (with or without @)
+        username: String,
+    },
 }

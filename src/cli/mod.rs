@@ -35,7 +35,7 @@ pub enum Command {
         #[command(subcommand)]
         action: user::UserAction,
     },
-    /// Self-account operations (mentions, bookmarks, likes, retweets)
+    /// Self-account operations (mentions, bookmarks, likes, retweets, follow, unfollow)
     #[command(name = "self")]
     SelfOps {
         #[command(subcommand)]
