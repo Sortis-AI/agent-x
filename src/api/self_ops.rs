@@ -163,4 +163,42 @@ impl XClient {
             id: Some(tweet_id.to_string()),
         })
     }
+
+    pub async fn follow_user(&self, username: &str) -> Result<MutationResult, AgentXError> {
+        let me = self.get_me_id().await?;
+        let target_id = self.resolve_user_id(username).await?;
+        let body = serde_json::json!({ "target_user_id": target_id });
+        let resp = self.post(&format!("/users/{me}/following"), body).await?;
+        let val: serde_json::Value = resp.json().await?;
+        let following = val
+            .get("data")
+            .and_then(|d| d.get("following"))
+            .and_then(|f| f.as_bool())
+            .unwrap_or(false);
+        Ok(MutationResult {
+            action: "follow".to_string(),
+            success: following,
+            id: Some(target_id),
+        })
+    }
+
+    pub async fn unfollow_user(&self, username: &str) -> Result<MutationResult, AgentXError> {
+        let me = self.get_me_id().await?;
+        let target_id = self.resolve_user_id(username).await?;
+        let resp = self
+            .delete(&format!("/users/{me}/following/{target_id}"))
+            .await?;
+        let val: serde_json::Value = resp.json().await?;
+        let unfollowed = val
+            .get("data")
+            .and_then(|d| d.get("following"))
+            .and_then(|f| f.as_bool())
+            .map(|f| !f)
+            .unwrap_or(true);
+        Ok(MutationResult {
+            action: "unfollow".to_string(),
+            success: unfollowed,
+            id: Some(target_id),
+        })
+    }
 }

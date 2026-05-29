@@ -321,6 +321,14 @@ async fn handle_self(
             let result = client.unbookmark_tweet(&id).await?;
             print_output(&result, config.output_mode);
         }
+        SelfAction::Follow { username } => {
+            let result = client.follow_user(&username).await?;
+            print_output(&result, config.output_mode);
+        }
+        SelfAction::Unfollow { username } => {
+            let result = client.unfollow_user(&username).await?;
+            print_output(&result, config.output_mode);
+        }
     }
     Ok(())
 }
