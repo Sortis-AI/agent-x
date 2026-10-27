@@ -19,6 +19,7 @@ impl XClient {
 
     /// Resolve a username to a user ID. If the input is already numeric, return it as-is.
     pub async fn resolve_user_id(&self, user: &str) -> Result<String, AgentXError> {
+        let user = user.trim_start_matches('@');
         if user.chars().all(|c| c.is_ascii_digit()) {
             Ok(user.to_string())
         } else {
