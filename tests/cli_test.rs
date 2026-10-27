@@ -222,3 +222,44 @@ fn test_community_get_no_auth() {
         .failure()
         .code(2);
 }
+
+#[test]
+fn test_self_help_includes_follow() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["self", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("follow"))
+        .stdout(predicate::str::contains("unfollow"));
+}
+
+#[test]
+fn test_self_follow_no_auth() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["self", "follow", "testuser"])
+        .env_remove("X_BEARER_TOKEN")
+        .env_remove("X_API_KEY")
+        .env_remove("X_API_SECRET")
+        .env_remove("X_ACCESS_TOKEN")
+        .env_remove("X_ACCESS_TOKEN_SECRET")
+        .assert()
+        .failure()
+        .code(2);
+}
+
+#[test]
+fn test_self_unfollow_no_auth() {
+    Command::cargo_bin("ax")
+        .unwrap()
+        .args(["self", "unfollow", "testuser"])
+        .env_remove("X_BEARER_TOKEN")
+        .env_remove("X_API_KEY")
+        .env_remove("X_API_SECRET")
+        .env_remove("X_ACCESS_TOKEN")
+        .env_remove("X_ACCESS_TOKEN_SECRET")
+        .assert()
+        .failure()
+        .code(2);
+}

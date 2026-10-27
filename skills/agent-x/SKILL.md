@@ -9,7 +9,7 @@ license: GPL-3.0
 compatibility: Requires Rust toolchain (cargo) or pre-built binary. Requires X API credentials (OAuth 2.0, OAuth 1.0a, or Bearer token).
 metadata:
   author: chris
-  version: "0.5.4"
+  version: "0.5.5"
   tags: "twitter,x,social-media,api,cli"
 ---
 
@@ -133,7 +133,7 @@ Check status: `ax auth status` | Log out: `ax auth logout`
 ax [--output json|plain|markdown|human] [--verbose]
 ├── tweet post [--community-id ID]|get|delete|reply|quote|search|metrics
 ├── user get|timeline|followers|following
-├── self mentions|bookmarks|like|unlike|retweet|unretweet|bookmark|unbookmark
+├── self mentions|bookmarks|like|unlike|retweet|unretweet|bookmark|unbookmark|follow|unfollow
 ├── community search|get|post
 └── auth login [--no-browser]|callback|status|logout
 ```
